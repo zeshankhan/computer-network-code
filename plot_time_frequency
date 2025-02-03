@@ -1,0 +1,46 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+A=[2,1,3,2,4]#Amplitudes
+F=[5,10,15,8,4]#Frequencies
+
+# Time domain
+t = np.linspace(0, 1, 1000)  # Time from 0 to 1 second
+x_t=0
+for i in range(len(A)):
+  x_t+=A[i] * np.sin(2 * np.pi * F[i] * t)
+
+#x_t = A[0] * np.sin(2 * np.pi * F[0] * t) + A[1] * np.sin(2 * np.pi * F[1] * t)  # Composite wave
+
+# Frequency domain
+frequencies = np.fft.fftfreq(len(t), d=t[1]-t[0])  # Frequency bins
+fft_values = np.fft.fft(x_t)  # Fourier Transform
+magnitude = np.abs(fft_values) / len(t)  # Normalized magnitude
+
+# Plot time domain independant waves
+plt.figure(figsize=(12, 6))
+plt.subplot(2, 1, 1)
+for i in range(len(A)):
+  plt.plot(t, A[i]*np.sin(2*np.pi*F[i]*t))
+plt.title("Time Domain: Indivisual Wave")
+plt.xlabel("Time (s)")
+plt.ylabel("Amplitude")
+
+
+# Plot time domain
+plt.figure(figsize=(12, 6))
+plt.subplot(2, 1, 1)
+plt.plot(t, x_t)
+plt.title("Time Domain: Composite Wave")
+plt.xlabel("Time (s)")
+plt.ylabel("Amplitude")
+
+# Plot frequency domain
+plt.subplot(2, 1, 2)
+plt.stem(frequencies, magnitude)
+plt.title("Frequency Domain: Fourier Transform")
+plt.xlabel("Frequency (Hz)")
+plt.ylabel("Magnitude")
+plt.xlim(0, 16)  # Show positive frequencies only
+plt.tight_layout()
+plt.show()
